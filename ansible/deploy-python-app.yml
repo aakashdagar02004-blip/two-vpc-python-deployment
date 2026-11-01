@@ -1,0 +1,33 @@
+---
+- name: Deploy Python application using Docker
+  hosts: hosting
+  become: yes
+
+  tasks:
+    - name: Create application directory
+      file:
+        path: /opt/python-app
+        state: directory
+        mode: '0755'
+
+    - name: Copy application files
+      copy:
+        src: "{{ playbook_dir }}/../python-app/"
+        dest: /opt/python-app/
+
+    - name: Build Docker image
+      community.docker.docker_image:
+        name: python-web-app
+        tag: v1
+        source: build
+        build:
+          path: /opt/python-app
+
+    - name: Run Python application container
+      community.docker.docker_container:
+        name: python-web-app
+        image: python-web-app:v1
+        state: started
+        restart_policy: always
+        published_ports:
+          - "80:5000"
