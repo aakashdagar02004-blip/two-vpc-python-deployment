@@ -7,7 +7,7 @@ def home():
     return """
     <h1>My Python Application</h1>
     <p>Successfully deployed using Docker, Ansible and AWS EC2!</p>
-    <p>Status: Running</p>
+    <p>Status: Running - Auto Deployment Test</p>
     """
 
 @app.route("/health")
